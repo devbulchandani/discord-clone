@@ -1,4 +1,4 @@
-import {cuurentProfile} from '@/lib/current-profile';
+import {currentProfile} from '@/lib/current-profile';
 import { db } from '@/lib/db';
 import { MemberRole } from '@prisma/client';
 import { NextResponse } from 'next/server';
@@ -7,7 +7,7 @@ import {v4 as uuidv4} from 'uuid'
 export async function POST(req: Request, res: Response){
     try {
         const {name, imageUrl} = await req.json();
-        const profile = await cuurentProfile();
+        const profile = await currentProfile();
         if(!profile) {
             return new NextResponse("Unauthorized", {status: 401});
         }

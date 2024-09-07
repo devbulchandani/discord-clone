@@ -15,8 +15,11 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { DialogFooter } from '../ui/dialog'
-import { FileUpload } from './file-upload'
+import { FileUpload } from '../file-upload'
 import { useRouter } from 'next/navigation'
+import { ModalType } from '@/hooks/use-modal-store'
+
+
 
 const formSchema = z.object({
     name: z.string().min(1, {
@@ -27,6 +30,8 @@ const formSchema = z.object({
         message: "Server image is required"
     }),
 })
+
+
 
 export const ServerForm = () => {
     const router = useRouter();
@@ -48,25 +53,27 @@ export const ServerForm = () => {
             form.reset();
             router.refresh();
             window.location.reload();
-        }catch (err) {
+        } catch (err) {
             console.log(err);
         }
     }
+
+
 
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
                 <div className="space-y-8 px-6">
                     <div className="flex items-center justify-center text-center">
-                        <FormField 
+                        <FormField
                             control={form.control}
                             name='imageUrl'
-                            render={({field}) => (
+                            render={({ field }) => (
                                 <FormItem>
                                     <FormControl>
-                                        <FileUpload 
-                                            endpoint= "serverImage"
-                                            value={field.value} 
+                                        <FileUpload
+                                            endpoint="serverImage"
+                                            value={field.value}
                                             onChange={field.onChange}
                                         />
                                     </FormControl>
@@ -85,11 +92,11 @@ export const ServerForm = () => {
                                 </FormLabel>
 
                                 <FormControl>
-                                    <Input 
-                                    disabled={isLoading}
-                                    className='bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0'
-                                    placeholder='Enter Server Name'
-                                    {...field}
+                                    <Input
+                                        disabled={isLoading}
+                                        className='bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0'
+                                        placeholder='Enter Server Name'
+                                        {...field}
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -99,9 +106,9 @@ export const ServerForm = () => {
                     />
                 </div>
                 <DialogFooter className='bg-gray-100 px-6 py-4'>
-                        <Button variant='primary' disabled={isLoading}>
-                            Create
-                        </Button>
+                    <Button variant='primary' disabled={isLoading}>
+                        Create
+                    </Button>
                 </DialogFooter>
             </form>
         </Form>
