@@ -4,6 +4,7 @@ import { ServerWithMembersWithProfiles } from "@/types"
 import { MemberRole } from "@prisma/client"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { ChevronDown, LogOut, PlusCircle, Settings, Trash, UserPlus, Users } from "lucide-react";
+import { useModal } from "@/hooks/use-modal-store";
 
 interface ServerHeaderProps {
     server: ServerWithMembersWithProfiles
@@ -13,9 +14,12 @@ interface ServerHeaderProps {
 const ServerHeader = ({
     server, role
 }: ServerHeaderProps) => {
+
+    const { onOpen } = useModal();
+
     const isAdmin = role === MemberRole.ADMIN;
     const isModerator = isAdmin || role === MemberRole.MODERATOR;
-    const isGuest = role === MemberRole.GUEST;
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger
@@ -36,6 +40,9 @@ const ServerHeader = ({
                 {isModerator && (
                     <DropdownMenuItem
                         className="text-indigo-600 dark:text-indigo-400 px-3 py-2 text-sm cursor-pointer"
+                        onClick={() => {
+                            onOpen("invite", { server: server })
+                        }}
                     >
                         Invite People
                         <UserPlus className="h-5 w-5 ml-auto" />
@@ -43,6 +50,9 @@ const ServerHeader = ({
                 )}
                 {isAdmin && (
                     <DropdownMenuItem
+                        onClick={() => {
+                            onOpen("editServer", { server: server })
+                        }}
                         className="px-3 py-2 text-sm cursor-pointer"
                     >
                         Server Settings
@@ -51,6 +61,9 @@ const ServerHeader = ({
                 )}
                 {isAdmin && (
                     <DropdownMenuItem
+                        onClick={() => {
+                            onOpen("members", { server: server })
+                        }}
                         className="px-3 py-2 text-sm cursor-pointer"
                     >
                         Manage Members

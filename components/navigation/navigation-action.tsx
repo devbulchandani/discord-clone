@@ -14,7 +14,6 @@ export const NavigationAction = () => {
             >
                 <button 
                 onClick={() => {
-                    console.log("Button clicked");
                     onOpen('createServer')
                 }}
                 className="group">

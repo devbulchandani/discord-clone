@@ -64,11 +64,14 @@ const ServerSidebar = async ({
     return (
         <div className='flex flex-col h-full text-primary w-full dark:bg-[#2b2d31] bg-[#f2f3f5]'>
             <ServerHeader
-            server={server}
-            role={role}
+                server={server}
+                role={role}
             />
         </div>
     )
 }
 
 export default ServerSidebar
+
+
+
