@@ -32,6 +32,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { ChannelType, Server } from '@prisma/client';
 import { useEffect } from 'react'
 
+
 const formSchema = z.object({
     name: z.string().min(1, {
         message: "Channel name is required"
@@ -47,7 +48,8 @@ const formSchema = z.object({
 
 
 
-export const ChannelForm = () => {
+
+export const ChannelForm = ({ channelType }: { channelType?: ChannelType }) => {
     const router = useRouter();
     const params = useParams();
 
@@ -55,10 +57,17 @@ export const ChannelForm = () => {
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: "",
-            type: ChannelType.TEXT
+            type: channelType || ChannelType.TEXT 
         }
     })
 
+    useEffect(() => {
+        if (channelType){
+            form.setValue("type", channelType);
+        } else {
+            form.setValue("type", ChannelType.TEXT);
+        }
+    }, [channelType, form])
 
     const isLoading = form.formState.isSubmitting;
 

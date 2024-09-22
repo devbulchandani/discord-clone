@@ -21,10 +21,10 @@ import { ChannelForm } from "../forms/channel-form";
 
 
 export function CreateChannelModal() {
-    const { isOpen, onClose, type } = useModal();
+    const { isOpen, onClose, type, data } = useModal();
     const isModalOpen = isOpen && type === "createChannel";
 
-
+    const { channelType } = data
 
 
     const handleClose = () => {
@@ -40,7 +40,7 @@ export function CreateChannelModal() {
                             Create Channel
                         </DialogTitle>
                     </DialogHeader>
-                    <ChannelForm />
+                    <ChannelForm channelType={channelType} />
                 </DialogContent>
             </Dialog>
         </div>
