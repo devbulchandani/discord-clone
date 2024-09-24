@@ -84,3 +84,9 @@ html, body, :root {
     @apply bg-background text-foreground;
   }
 }
+
+.custom-sidebar {
+  @media (min-width: 768px) {
+    display: flex !important; 
+  }
+}
