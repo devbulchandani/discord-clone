@@ -29,7 +29,7 @@ import { Button } from '@/components/ui/button'
 import { DialogFooter } from '../ui/dialog'
 import { FileUpload } from '../file-upload'
 import { useParams, useRouter } from 'next/navigation'
-import { ChannelType, Server } from '@prisma/client';
+import { Channel, ChannelType, Server } from '@prisma/client';
 import { useEffect } from 'react'
 
 
@@ -49,37 +49,58 @@ const formSchema = z.object({
 
 
 
-export const ChannelForm = ({ channelType }: { channelType?: ChannelType }) => {
+export const ChannelForm = (
+    { channelType, channel, server }:
+        {
+            channelType?: ChannelType;
+            channel?: Channel;
+            server?: Server
+        }
+) => {
     const router = useRouter();
     const params = useParams();
 
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: "",
-            type: channelType || ChannelType.TEXT 
+            name: channel ? channel.name : "",
+            type: channel ? channel.type : channelType || ChannelType.TEXT
         }
     })
 
     useEffect(() => {
-        if (channelType){
+        if (channel) {
+            form.setValue("name", channel.name);
+            form.setValue("type", channel.type);
+        } else if (channelType) {
             form.setValue("type", channelType);
         } else {
             form.setValue("type", ChannelType.TEXT);
         }
-    }, [channelType, form])
+    }, [channelType, channel, form])
 
     const isLoading = form.formState.isSubmitting;
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
-            const url = qs.stringifyUrl({
-                url: `/api/channels`,
-                query: {
-                    serverId: params?.serverId
-                }
-            })
-            await axios.post(url, values);
+            if (channel) {
+                const url = qs.stringifyUrl({
+                    url: `/api/channels/${channel.id}`,
+                    query: {
+                        serverId: server?.id
+                    }
+                })
+                await axios.patch(url, values);
+            } else {
+                const url = qs.stringifyUrl({
+                    url: `/api/channels`,
+                    query: {
+                        serverId: params?.serverId
+                    }
+                })
+                await axios.post(url, values);
+            }
+
             form.reset();
             router.refresh();
             window.location.reload();
@@ -153,9 +174,16 @@ export const ChannelForm = ({ channelType }: { channelType?: ChannelType }) => {
 
 
                 <DialogFooter className='bg-gray-100 px-6 py-4'>
-                    <Button variant='primary' disabled={isLoading}>
-                        Create
-                    </Button>
+                    {channel ? (
+                        <Button variant='primary' disabled={isLoading}>
+                            Save
+                        </Button>
+                    ) : (
+                        <Button variant='primary' disabled={isLoading}>
+                            Create
+                        </Button>
+                    )}
+
                 </DialogFooter>
             </form>
         </Form>
