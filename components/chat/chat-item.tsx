@@ -70,13 +70,13 @@ export const ChatItem = ({
 }: ChatItemProps) => {
 
     const [isEditing, setIsEditing] = useState(false);
-    const {onOpen} = useModal();
+    const { onOpen } = useModal();
 
     const params = useParams();
     const router = useRouter();
 
     const onMemberClick = () => {
-        if (member.id === currentMember.id){
+        if (member.id === currentMember.id) {
             return
         }
 
@@ -90,14 +90,14 @@ export const ChatItem = ({
                 setIsEditing(false);
             }
         };
-    
+
         window.addEventListener('keydown', handleKeyDown);
-    
+
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
         };
     }, []);
-    
+
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -128,7 +128,7 @@ export const ChatItem = ({
         form.reset({
             content: content,
         })
-    }, [content])
+    }, [content, form])
 
 
     const fileType = fileUrl?.split('.').pop();
@@ -147,17 +147,17 @@ export const ChatItem = ({
         <div
             className="relative group flex items-center hover:bg-black/5 p-4 transition w-full">
             <div className="group flex gap-x-2 items-start w-full">
-                <div 
-                onClick={onMemberClick}
-                className="cursor-pointer hover:drop-shadow-md transition">
+                <div
+                    onClick={onMemberClick}
+                    className="cursor-pointer hover:drop-shadow-md transition">
                     <UserAvatar src={member.profile.imageUrl} />
                 </div>
                 <div className="flex flex-col w-full">
                     <div className="flex items-center gap-x-2">
                         <div className="flex items-center">
-                            <p 
-                            onClick={onMemberClick}
-                            className="font-semibold text-sm hover:underline cursor-pointer">
+                            <p
+                                onClick={onMemberClick}
+                                className="font-semibold text-sm hover:underline cursor-pointer">
                                 {member.profile.name}
                             </p>
                             <ActionTooltip
@@ -217,38 +217,39 @@ export const ChatItem = ({
                     )}
                     {!fileUrl && isEditing && (
                         <Form {...form}>
-                            <form 
-                            className="flex items-center w-full gap-x-2 pt-2"
-                            onSubmit={form.handleSubmit(onSubmit)}>
-                                <FormField 
-                                control={form.control}
-                                name="content"
-                                render={({field}) => (
-                                    <FormItem className="flex-1">
-                                        <FormControl>
-                                            <div className="relative w-full">
-                                                <Input 
-                                                disabled={isLoading}
-                                                className="p-2 bg-zinc-200/90 dark:bg-zinc-700/75 border-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-zinc-600 dark:text-zinc-200"
-                                                placeholder="Edited message"
-                                                {...field}
-                                                />
-                                            </div>
-                                        </FormControl>
-                                    </FormItem>
-                                )}
+                            <form
+                                className="flex items-center w-full gap-x-2 pt-2"
+                                onSubmit={form.handleSubmit(onSubmit)}>
+                                <FormField
+                                    control={form.control}
+                                    name="content"
+                                    render={({ field }) => (
+                                        <FormItem className="flex-1">
+                                            <FormControl>
+                                                <div className="relative w-full">
+                                                    <Input
+                                                        disabled={isLoading}
+                                                        className="p-2 bg-zinc-200/90 dark:bg-zinc-700/75 border-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-zinc-600 dark:text-zinc-200"
+                                                        placeholder="Edited message"
+                                                        {...field}
+                                                    />
+                                                </div>
+                                            </FormControl>
+                                        </FormItem>
+                                    )}
                                 />
-                                <Button 
-                                disabled={isLoading}
-                                size='sm'
-                                variant='primary'
+                                <Button
+                                    disabled={isLoading}
+                                    size='sm'
+                                    variant='primary'
                                 >
                                     Save
                                 </Button>
                             </form>
                             <span className="text-[10px] mt-1 text-zinc-400">
-                                Press 'esc' to cance', 'enter' to save
+                                Press &apos;esc&apos; to cancel, &apos;enter&apos; to save
                             </span>
+
                         </Form>
 
                     )}
@@ -266,10 +267,10 @@ export const ChatItem = ({
                     )}
                     <ActionTooltip label="Delete">
                         <Trash
-                        onClick={() => onOpen('deleteMessage', {
-                            apiUrl : `${socketUrl}/${id}`,
-                            query: socketQuery
-                        })}
+                            onClick={() => onOpen('deleteMessage', {
+                                apiUrl: `${socketUrl}/${id}`,
+                                query: socketQuery
+                            })}
                             className="cursor-pointer ml-auto w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition"
                         />
                     </ActionTooltip>

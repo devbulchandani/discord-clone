@@ -1,3 +1,6 @@
+export const dynamic = 'force-dynamic';
+
+
 import { currentProfile } from "@/lib/current-profile";
 import { NextResponse } from "next/server";
 import { DirectMessage, Message } from "@prisma/client";
@@ -44,7 +47,7 @@ export async function GET(
                     }
                 },
                 orderBy: {
-                    createdAt: 'desc', 
+                    createdAt: 'desc',
                 }
             });
         } else {
