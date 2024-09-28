@@ -15,7 +15,6 @@ const ServerIdPage = async ({ params }: ServerIdPageProps) => {
     if (!profile) {
         return <RedirectToSignIn />
     }
-    console.log(profile);
 
     const server = await db.server.findUnique({
         where: {
@@ -44,7 +43,6 @@ const ServerIdPage = async ({ params }: ServerIdPageProps) => {
         return null;
     }
 
-    console.log("General Page Id: " + initialChannel?.id);
 
     return redirect(`/servers/${params.serverId}/channels/${initialChannel?.id}`);
 }
